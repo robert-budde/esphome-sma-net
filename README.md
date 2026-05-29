@@ -16,7 +16,29 @@ This repository is structured as an ESPHome external component:
 
 - ESPHome (recommended: current stable)
 - ESP32 board (this repo currently targets ESP32-C3 in examples)
+- Access to the SMA **RS485i** interface (Sunny Boy)
 - UART wiring to your SMA NET source
+
+## Hardware connection (Sunny Boy / RS485i)
+
+This component expects SMA NET data via UART and therefore requires access to the inverter's RS485i bus.
+
+### Option A: External RS485 transceiver (recommended)
+
+Connect an ESP32/ESP32-C3 to the Sunny Boy RS485i interface using an external RS485-UART transceiver.
+This keeps the inverter-side hardware unchanged and is the preferred approach.
+
+### Option B: Internal modification of RS485i module (advanced)
+
+Advanced users may open the RS485i module and remove the isolated RS485 driver (ADM2587) and the 5V transformer,
+then connect the ESP32 directly and install it internally.
+
+⚠️ Important:
+
+- This removes galvanic isolation.
+- Use only if you fully understand the electrical and safety implications.
+- Proper enclosed, wireless-only operation may be acceptable in some setups, but this is entirely at your own risk.
+- No warranty or liability is assumed for damage, malfunction, or safety incidents.
 
 ## Install / Use as external component
 
