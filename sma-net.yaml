@@ -1,0 +1,203 @@
+esphome:
+  name: sma-net
+  friendly_name: "SMA Net"
+  min_version: 2026.5.0
+  platformio_options:
+    board_build.f_flash: 40000000L
+    board_build.flash_mode: dio
+    board_build.flash_size: 4MB
+external_components:
+  - source:
+      type: local
+      path: ./components
+    components: [sma_net]
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "Fallback-SMA"
+    password: !secret wifi_password
+
+logger:
+  level: DEBUG
+  baud_rate: 0
+
+api:
+
+ota:
+  - platform: esphome
+
+captive_portal:
+
+time:
+  - platform: homeassistant
+    id: ha_time
+
+uart:
+  id: uart_sma
+  tx_pin: GPIO21
+  rx_pin: GPIO20
+  baud_rate: 19200
+  stop_bits: 1
+  parity: NONE
+
+sma_net:
+  id: sma
+  uart_id: uart_sma
+  update_interval: 3s
+  slow_factor: 20
+  debug: true
+
+sensor:
+  - platform: sma_net
+    sma_net_id: sma
+    channel: Pac
+    interval: fast
+    name: "Pac"
+    icon: "mdi:flash"
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: GridMs.PhV.phsA
+    name: "Netzspannung L1"
+    icon: "mdi:sine-wave"
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 2
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: GridMs.A.phsA
+    name: "Netzstrom L1"
+    icon: "mdi:current-ac"
+    unit_of_measurement: "A"
+    device_class: current
+    state_class: measurement
+    accuracy_decimals: 3
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: GridMs.Hz
+    name: "Netzfrequenz"
+    icon: "mdi:pulse"
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    state_class: measurement
+    accuracy_decimals: 2
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: E-Total
+    name: "Gesamtertrag"
+    icon: "mdi:counter"
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: total_increasing
+    accuracy_decimals: 3
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: A.Ms.Vol
+    name: "DC String A Spannung"
+    icon: "mdi:sine-wave"
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 2
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: A.Ms.Amp
+    name: "DC String A Strom"
+    icon: "mdi:current-dc"
+    unit_of_measurement: "A"
+    device_class: current
+    state_class: measurement
+    accuracy_decimals: 3
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: B.Ms.Vol
+    name: "DC String B Spannung"
+    icon: "mdi:sine-wave"
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 2
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: B.Ms.Amp
+    name: "DC String B Strom"
+    icon: "mdi:current-dc"
+    unit_of_measurement: "A"
+    device_class: current
+    state_class: measurement
+    accuracy_decimals: 3
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: A.Ms.Watt
+    name: "DC String A Leistung"
+    icon: "mdi:solar-power"
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 1
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: B.Ms.Watt
+    name: "DC String B Leistung"
+    icon: "mdi:solar-power"
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 1
+
+text_sensor:
+  - platform: sma_net
+    sma_net_id: sma
+    channel: "Data_Timestamp"
+    name: "Zeitstempel Daten"
+    entity_category: diagnostic
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: "Error485i"
+    name: "Error485i"
+    entity_category: diagnostic
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: "Mode"
+    name: "Mode"
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: "Error"
+    name: "Error"
+    entity_category: diagnostic
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: "Op.Health"
+    name: "Health"
+    entity_category: diagnostic
+
+  - platform: sma_net
+    sma_net_id: sma
+    channel: "Op.GriSwStt"
+    name: "Netz-Relais"
+    entity_category: diagnostic
