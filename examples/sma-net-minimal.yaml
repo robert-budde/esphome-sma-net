@@ -4,8 +4,9 @@ esphome:
 
 external_components:
   - source:
-      type: local
-      path: ../components
+      type: git
+      url: https://github.com/robert-budde/esphome-sma-net.git
+      ref: v1.0
     components: [sma_net]
 
 esp32:
